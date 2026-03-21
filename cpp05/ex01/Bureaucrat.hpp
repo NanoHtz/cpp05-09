@@ -5,6 +5,8 @@
 # include <exception>
 # include <ostream>
 
+class Form;
+
 class Bureaucrat
 {
     private:
@@ -24,7 +26,7 @@ class Bureaucrat
         int getGrade() const;
         void incrementGrade();
         void decrementGrade();
-        //Class
+        //Exceptions
         class GradeTooHighException : public std::exception
         {
             public:
@@ -35,6 +37,7 @@ class Bureaucrat
             public:
                 const char* what() const throw();
         };
+        void signForm(Form &other);
 
 };
 
