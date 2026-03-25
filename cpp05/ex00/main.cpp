@@ -43,5 +43,30 @@ int main()
         std::cout << e.what() << std::endl;
     }
 
+    try
+    {
+        std::cout << std::endl <<"BadBureaucrat02:" << std::endl;
+        Bureaucrat BadBureaucrat02 = Bureaucrat("BadBureaucrat02", 200);
+    }
+    catch (std::exception & e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    try
+    {
+        std::cout << std::endl <<"BadBureaucrat03:" << std::endl;
+        Bureaucrat BadBureaucrat03 = Bureaucrat("BadBureaucrat03", 150);
+        std::cout << BadBureaucrat03;
+        std::cout << BadBureaucrat03.getGrade() << std::endl;
+        std::cout << "BadBureaucrat03 grade -1:" << std::endl;
+        BadBureaucrat03.decrementGrade();
+        std::cout << BadBureaucrat03.getGrade() << std::endl;
+    }
+    catch (std::exception & e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
     return (0);
 }

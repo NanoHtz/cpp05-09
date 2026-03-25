@@ -26,9 +26,9 @@ Bureaucrat &Bureaucrat::operator=(const Bureaucrat &other)
 Bureaucrat::Bureaucrat(const std::string &name, int grade) : _name(name)
 {
     if (grade > 150)
-        throw (GradeTooHighException());
-    else if (grade < 1)
         throw (GradeTooLowException());
+    else if (grade < 1)
+        throw (GradeTooHighException());
     else
         this->_grade = grade;
 }
@@ -61,13 +61,13 @@ void Bureaucrat::decrementGrade()
 
 const char* Bureaucrat::GradeTooHighException::what() const throw()
 {
-    const char *c = "Grade too high, grade cannot be higher than 150";
+    const char *c = "Grade too high, grade cannot be higher than 1";
     return (c);
 }
 
 const char* Bureaucrat::GradeTooLowException::what() const throw()
 {
-    const char *c = "Grade too low, grade cannot be lower than 1";
+    const char *c = "Grade too low, grade cannot be lower than 150";
     return (c);
 }
 
@@ -86,6 +86,6 @@ void Bureaucrat::signForm(Form &other)
     }
     catch (std::exception &e)
     {
-        std::cout << this->getName() << "  couldn't sign  " << other.getName() << " because " << e.what() << std::endl;
+        std::cout << this->getName() << " couldn't sign " << other.getName() << " because " << e.what() << std::endl;
     }
 }

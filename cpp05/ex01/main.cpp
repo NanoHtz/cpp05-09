@@ -36,5 +36,56 @@ int main()
         std::cout << e.what() << std::endl;
     }
 
+    try
+    {
+        Bureaucrat b("Incremented", 1);
+        std::cout << b;
+        b.incrementGrade();
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    try
+    {
+        Form f("FormA", 50, 25);
+        std::cout << f;
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    try
+    {
+        Bureaucrat original("Original", 10);
+        Bureaucrat copy(original);
+        Bureaucrat assigned("Placeholder", 50);
+        assigned = original;
+        std::cout << original;
+        std::cout << copy;
+        std::cout << assigned;
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    try
+    {
+        Form original("OriginalForm", 30, 20);
+        Form copy(original);
+        Form assigned("Placeholder", 80, 80);
+        assigned = original;
+        std::cout << original;
+        std::cout << copy;
+        std::cout << assigned;
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
     return (0);
 }
