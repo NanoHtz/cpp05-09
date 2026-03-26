@@ -29,6 +29,8 @@ Bureaucrat::Bureaucrat(const std::string &name, int grade) : _name(name)
         throw (GradeTooLowException());
     else if (grade < 1)
         throw (GradeTooHighException());
+    else
+        this->_grade = grade;
 }
 
 std::string Bureaucrat::getName() const
@@ -82,7 +84,7 @@ void Bureaucrat::signForm(AForm &other)
     }
     catch (std::exception &e)
     {
-        std::cout << this->getName() << "  couldn't sign  " << other.getName() << " because " << e.what() << std::endl;
+        std::cout << this->getName() << " couldn't sign " << other.getName() << " because " << e.what() << std::endl;
     }
 }
 
@@ -95,6 +97,6 @@ void Bureaucrat::executeForm(AForm const &other) const
     }
     catch (std::exception &e)
     {
-        std::cout << this->getName() << "  couldn't execute  " << other.getName() << " because " << e.what() << std::endl;
+        std::cout << this->getName() << " couldn't execute " << other.getName() << " because " << e.what() << std::endl;
     }
 }

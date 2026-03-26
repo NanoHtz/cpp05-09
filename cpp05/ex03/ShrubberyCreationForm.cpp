@@ -3,7 +3,7 @@
 #include "AForm.hpp"
 #include <iostream>
 
-ShrubberyCreationForm::ShrubberyCreationForm() : AForm("Shrubbery" , 145, 137), _target("Default")
+ShrubberyCreationForm::ShrubberyCreationForm() : AForm("Shrubbery", 137, 145), _target("Default")
 {
 }
 
@@ -12,7 +12,7 @@ ShrubberyCreationForm::~ShrubberyCreationForm()
 
 }
 
-ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other) : AForm("Shrubbery" , 145, 137)
+ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other) : AForm(other)
 {
     this->_target = other._target;
 }
@@ -20,11 +20,14 @@ ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other)
 ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationForm &other)
 {
     if (&other != this)
+    {
+        AForm::operator=(other);
         this->_target = other._target;
+    }
     return (*this);
 }
 
-ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target) : AForm("Shrubbery" , 145, 137) ,  _target(target)
+ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target) : AForm("Shrubbery", 137, 145),  _target(target)
 {
 }
 

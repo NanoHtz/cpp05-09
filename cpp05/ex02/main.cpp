@@ -7,6 +7,7 @@
 
 int main()
 {
+    srand(time(0));
     try
     {
         Bureaucrat GoodBureaucrat = Bureaucrat("GoodBureaucrat", 1);

@@ -12,7 +12,7 @@ ShrubberyCreationForm::~ShrubberyCreationForm()
 
 }
 
-ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other) : AForm("Shrubbery", 137, 145)
+ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other) : AForm(other)
 {
     this->_target = other._target;
 }
@@ -20,7 +20,10 @@ ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other)
 ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationForm &other)
 {
     if (&other != this)
+    {
+        AForm::operator=(other);
         this->_target = other._target;
+    }
     return (*this);
 }
 

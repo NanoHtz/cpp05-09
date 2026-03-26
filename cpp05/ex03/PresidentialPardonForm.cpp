@@ -3,7 +3,7 @@
 #include "AForm.hpp"
 #include <iostream>
 
-PresidentialPardonForm::PresidentialPardonForm() : AForm("Pardon" ,25, 5), _target("Default")
+PresidentialPardonForm::PresidentialPardonForm() : AForm("Pardon", 5, 25), _target("Default")
 {
 }
 
@@ -12,7 +12,7 @@ PresidentialPardonForm::~PresidentialPardonForm()
 
 }
 
-PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm &other) : AForm("Pardon" ,25, 5)
+PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm &other) : AForm(other)
 {
     this->_target = other._target;
 }
@@ -20,11 +20,14 @@ PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm &oth
 PresidentialPardonForm &PresidentialPardonForm::operator=(const PresidentialPardonForm &other)
 {
     if (&other != this)
+    {
+        AForm::operator=(other);
         this->_target = other._target;
+    }
     return (*this);
 }
 
-PresidentialPardonForm::PresidentialPardonForm(const std::string &target) : AForm("Pardon" ,25, 5) ,  _target(target)
+PresidentialPardonForm::PresidentialPardonForm(const std::string &target) : AForm("Pardon", 5, 25),  _target(target)
 {
 }
 

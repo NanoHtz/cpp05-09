@@ -52,13 +52,13 @@ int AForm::getSig() const
 
 const char* AForm::GradeTooHighException::what() const throw()
 {
-    const char *c = "Grade too high, grade cannot be higher than 150";
+    const char *c = "Grade too high, grade cannot be higher than 1";
     return (c);
 }
 
 const char* AForm::GradeTooLowException::what() const throw()
 {
-    const char *c = "Grade too low, grade cannot be lower than 1";
+    const char *c = "Grade too low, grade cannot be lower than 150";
     return (c);
 }
 

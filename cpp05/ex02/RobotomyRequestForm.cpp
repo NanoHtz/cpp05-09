@@ -12,7 +12,7 @@ RobotomyRequestForm::~RobotomyRequestForm()
 
 }
 
-RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &other) : AForm("Robotomy", 45, 72)
+RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &other) : AForm(other)
 {
     this->_target = other._target;
 }
@@ -20,7 +20,10 @@ RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &other) : AFo
 RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &other)
 {
     if (&other != this)
+    {
+        AForm::operator=(other);
         this->_target = other._target;
+    }
     return (*this);
 }
 
@@ -38,7 +41,6 @@ void RobotomyRequestForm:: execute(const Bureaucrat &bureu) const
     else
     {
         std::cout << "Dr......" << std::endl;
-        srand(time(0));
         int random = rand() % 2;
         if (random == 0)
             std::cout << "informs that " << this->_target << " has been robotomized successfully.\n" << std::endl;

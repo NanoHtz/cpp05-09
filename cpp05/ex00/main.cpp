@@ -68,5 +68,14 @@ int main()
         std::cout << e.what() << std::endl;
     }
 
+    Bureaucrat original("Original", 42);
+    Bureaucrat copy(original);
+    std::cout << copy;
+
+    Bureaucrat assigned;
+    assigned = original;
+    std::cout << assigned;
+    std::cout << std::endl;
+
     return (0);
 }

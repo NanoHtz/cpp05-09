@@ -8,6 +8,7 @@
 
 int main()
 {
+    srand(time(0));
     try
     {
         Intern inter00 = Intern();

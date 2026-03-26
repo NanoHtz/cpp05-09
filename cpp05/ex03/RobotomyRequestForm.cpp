@@ -3,7 +3,7 @@
 #include "AForm.hpp"
 #include <iostream>
 
-RobotomyRequestForm::RobotomyRequestForm() : AForm("Robotomy", 72, 45), _target("Default")
+RobotomyRequestForm::RobotomyRequestForm() : AForm("Robotomy", 45, 72), _target("Default")
 {
 }
 
@@ -12,7 +12,7 @@ RobotomyRequestForm::~RobotomyRequestForm()
 
 }
 
-RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &other) : AForm("Robotomy", 72, 45)
+RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &other) : AForm(other)
 {
     this->_target = other._target;
 }
@@ -20,11 +20,14 @@ RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &other) : AFo
 RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &other)
 {
     if (&other != this)
+    {
+        AForm::operator=(other);
         this->_target = other._target;
+    }
     return (*this);
 }
 
-RobotomyRequestForm::RobotomyRequestForm(const std::string &target) : AForm("Robotomy", 72, 45) ,  _target(target)
+RobotomyRequestForm::RobotomyRequestForm(const std::string &target) : AForm("Robotomy", 45, 72) ,  _target(target)
 {
 }
 
@@ -38,7 +41,6 @@ void RobotomyRequestForm:: execute(const Bureaucrat &bureu) const
     else
     {
         std::cout << "Dr......" << std::endl;
-        srand(time(0));
         int random = rand() % 2;
         if (random == 0)
             std::cout << "informs that " << this->_target << " has been robotomized successfully.\n" << std::endl;
