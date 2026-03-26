@@ -7,6 +7,7 @@
 #include <cfloat>
 #include <cmath>
 #include <cstdlib>
+#include <iomanip>
 
 enum Type {
     CHAR,

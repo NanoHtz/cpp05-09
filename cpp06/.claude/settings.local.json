@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./ScalarConverter 42)",
+      "Bash(make re:*)",
+      "Bash(./Serializer)",
+      "Bash(./Identify)",
+      "Bash(./Base)"
+    ]
+  }
+}

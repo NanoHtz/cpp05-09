@@ -58,8 +58,8 @@ void	convertInt(const std::string& str)
 		std::cout << "impossible" << std::endl;
 	else
 		std::cout	<< static_cast<int>(l) << std::endl;
-	std::cout << "float: " << static_cast<float>(l) << ".0f" << std::endl;
-	std::cout << "double: " << static_cast<double>(l) << ".0" << std::endl;
+	std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(l) << "f" << std::endl;
+	std::cout << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(l) << std::endl;
 }
 
 void	convertFloat(const std::string& str)
