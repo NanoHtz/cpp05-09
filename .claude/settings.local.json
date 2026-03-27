@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make re:*)",
+      "Bash(./ScalarConverter)",
+      "Bash(./ScalarConverter 42.0f)",
+      "Bash(./ScalarConverter -4.2)",
+      "Bash(./ScalarConverter ' ')",
+      "Bash(./ScalarConverter 0)",
+      "Bash(./ScalarConverter 2147483647)",
+      "Bash(./ScalarConverter 2147483648)",
+      "Bash(./ScalarConverter 1.5f)",
+      "Bash(./ScalarConverter \"0.0f\")",
+      "Bash(./ScalarConverter \"0.0\")",
+      "Bash(python3:*)",
+      "Bash(./ScalarConverter \".\")",
+      "Bash(./ScalarConverter \".5f\")",
+      "Bash(./ScalarConverter \".5\")",
+      "Bash(./ScalarConverter \"3.f\")",
+      "Bash(./ScalarConverter \"42.0\")",
+      "Bash(./Serializer)",
+      "Bash(./Base)",
+      "Bash(valgrind --leak-check=full --error-exitcode=1 ./Base)",
+      "Bash(./Whatever echo:*)",
+      "Bash(./Iter echo:*)",
+      "Bash(./Array)",
+      "Bash(./Template)",
+      "Bash(./Iter)"
+    ]
+  }
+}

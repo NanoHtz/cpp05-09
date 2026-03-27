@@ -30,7 +30,7 @@ void	convertChar(const std::string& str)
 	char	c = str[0];
 
 	std::cout << "char: ";
-	if (isprint(c))
+	if (isprint((unsigned char)c))
 		std::cout << "'" << c << "'" << std::endl;
 	else
 		std::cout << "Non displayable" << std::endl;
@@ -60,13 +60,15 @@ void	convertInt(const std::string& str)
 		std::cout	<< static_cast<int>(l) << std::endl;
 	std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(l) << "f" << std::endl;
 	std::cout << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(l) << std::endl;
+	std::cout.unsetf(std::ios::floatfield);
+	std::cout << std::setprecision(6);
 }
 
 void	convertFloat(const std::string& str)
 {
 	float	f = std::atof(str.c_str());
-	bool	tolerance = (f >= INT_MIN && f <= INT_MAX) &&
-				std::fabs(f - static_cast<int>(f)) < 0.0000000000001;
+	bool	tolerance = (static_cast<long>(f) >= INT_MIN && static_cast<long>(f) <= INT_MAX) &&
+				std::fabs(f - static_cast<long>(f)) < 0.0000000000001;
 
 	std::cout << "char: ";
 	if (f < 0 || f > 127)
@@ -90,8 +92,8 @@ void	convertFloat(const std::string& str)
 void	convertDouble(const std::string& str)
 {
 	double	d = std::atof(str.c_str());
-	bool	tolerance = (d >= INT_MIN && d <= INT_MAX) &&
-				std::fabs(d - static_cast<int>(d)) < 0.0000000000001;
+	bool	tolerance = (static_cast<long long>(d) >= INT_MIN && static_cast<long long>(d) <= INT_MAX) &&
+				std::fabs(d - static_cast<long long>(d)) < 0.0000000000001;
 
 	std::cout << "char: ";
 	if (d < 0 || d > 127)

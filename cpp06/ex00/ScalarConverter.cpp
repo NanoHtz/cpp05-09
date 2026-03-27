@@ -57,7 +57,7 @@ static bool	isPseudo(const std::string& str)
 
 static bool isChar(const std::string &str, size_t len)
 {
-    if (len == 1 && !std::isdigit(str[0]))
+    if (len == 1 && !std::isdigit((unsigned char)str[0]))
         return (true);
     return (false);
 }
@@ -67,7 +67,7 @@ static bool isInt(const std::string &str, size_t len)
     if (str.empty())
         return (false);
     size_t i = 0;
-    if (str[0] == '-')
+    if ((str[0] == '+' || str[0] == '-') && len > 1)
         i++;
     for (; i < len; i++)
     {
@@ -84,7 +84,8 @@ static bool isFloat(const std::string &str, size_t len, size_t f)
 
     size_t i = 0;
     int dots = 0;
-    if (str[0] == '-')
+    int digits = 0;
+    if ((str[0] == '+' || str[0] == '-') && len > 1)
         i++;
     for (; i < f; i++)
     {
@@ -92,8 +93,10 @@ static bool isFloat(const std::string &str, size_t len, size_t f)
             return (false);
         if (str[i] == '.')
             dots++;
+        else
+            digits++;
     }
-    if (dots != 1)
+    if (dots != 1 || digits < 1)
         return (false);
     return (true);
 }
@@ -102,7 +105,8 @@ static bool isDouble(const std::string &str, size_t len)
 {
     size_t i = 0;
     int dots = 0;
-    if (str[0] == '-')
+    int digits = 0;
+    if ((str[0] == '+' || str[0] == '-') && len > 1)
         i++;
     for (; i < len; i++)
     {
@@ -110,8 +114,10 @@ static bool isDouble(const std::string &str, size_t len)
             return (false);
         if (str[i] == '.')
             dots++;
+        else
+            digits++;
     }
-    if (dots != 1)
+    if (dots != 1 || digits < 1)
         return (false);
     return (true);
 }
@@ -137,7 +143,7 @@ Type str_type(const std::string &str, size_t len)
             if (isFloat(str, len, f))
                 return FLOAT;
         }
-        else if (f == std::string::npos)
+        else
         {
             if (isDouble(str, len))
                 return DOUBLE;

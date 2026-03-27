@@ -28,6 +28,7 @@ Array<T> &Array<T>::operator=(const Array &src)
     if (this == &src)
         return (*this);
     delete [] this->_ptr;
+    this->_ptr = NULL; 
     this->_len = src.size();
     this->_ptr = new T[this->_len];
     for (size_t i = 0; i < this->_len; i++)
