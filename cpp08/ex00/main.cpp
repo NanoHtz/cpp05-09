@@ -12,16 +12,22 @@ int main()
     vec.push_back(3);
     vec.push_back(4);
 
-    try {
-        std::vector<int>::iterator it = easyfind(vec, 3);
+    try
+    {
+        std::vector<int>::const_iterator it = easyfind(vec, 1);
         std::cout << "Found in vector: " << *it << std::endl;
-    } catch (std::exception &e) {
+    }
+    catch (std::exception &e)
+    {
         std::cout << "Not found in vector" << std::endl;
     }
 
-    try {
+    try
+    {
         easyfind(vec, 42);
-    } catch (std::exception &e) {
+    }
+    catch (std::exception &e)
+    {
         std::cout << "42 not found in vector" << std::endl;
     }
 
@@ -30,12 +36,29 @@ int main()
     lst.push_back(20);
     lst.push_back(30);
 
-    try {
-        std::list<int>::iterator it = easyfind(lst, 20);
+    try
+    {
+        std::list<int>::const_iterator it = easyfind(lst, 20);
         std::cout << "Found in list: " << *it << std::endl;
-    } catch (std::exception &e) {
+    }
+    catch (std::exception &e)
+    {
         std::cout << "Not found in list" << std::endl;
     }
 
+    std::deque<int> dq;
+    dq.push_back(10);
+    dq.push_back(20);
+    dq.push_back(30);
+
+    try
+    {
+        std::deque<int>::const_iterator it = easyfind(dq, 20);
+        std::cout << "Found in deque: " << *it << std::endl;
+    }
+    catch (std::exception &e)
+    {
+        std::cout << "Not found in deque" << std::endl;
+    }
     return 0;
 }

@@ -1,0 +1,153 @@
+# EX02 — Mutated abomination
+
+## Que hace
+
+Implementa una clase `MutantStack` que es un `std::stack` normal pero con una caracteristica extra: **es iterable**.
+
+El problema original: `std::stack` es uno de los pocos contenedores STL que **no tiene iteradores**. Este ejercicio lo soluciona heredando de el y exponiendo los iteradores del contenedor subyacente.
+
+---
+
+## El problema con `std::stack`
+
+`std::stack` es un **adaptador de contenedor**: por defecto envuelve un `std::deque` internamente, pero oculta sus iteradores a proposito (es una pila LIFO, no se supone que la recorras).
+
+```
+std::stack<int> s;
+s.begin(); // ERROR — no existe
+s.end();   // ERROR — no existe
+```
+
+La solucion: heredar de `std::stack` y exponer los iteradores del contenedor interno.
+
+---
+
+## Estructura de MutantStack
+
+```cpp
+template<typename T>
+class MutantStack : public std::stack<T>
+{
+    public:
+        MutantStack();
+        MutantStack(const MutantStack<T> &src);
+        MutantStack<T> &operator=(const MutantStack<T> &src);
+        ~MutantStack();
+
+        typedef typename std::stack<T>::container_type::iterator       iterator;
+        typedef typename std::stack<T>::container_type::const_iterator const_iterator;
+
+        iterator begin();
+        iterator end();
+        const_iterator begin() const;
+        const_iterator end() const;
+};
+```
+
+---
+
+## Conceptos clave
+
+### `public std::stack<T>`
+Herencia publica. `MutantStack` **es** un `std::stack` y hereda todos sus metodos:
+`push()`, `pop()`, `top()`, `size()`, `empty()`.
+
+---
+
+### `std::stack<T>::container_type`
+`std::stack` guarda sus elementos en un contenedor interno llamado `c` (de tipo `container_type`, que por defecto es `std::deque<T>`).
+
+Este atributo **esta protegido** (`protected`), lo que significa que las clases hijas pueden accederlo directamente.
+
+```cpp
+// Dentro de MutantStack:
+iterator begin() { return this->c.begin(); }
+iterator end()   { return this->c.end();   }
+```
+
+---
+
+### `typedef typename std::stack<T>::container_type::iterator iterator`
+Define el tipo `iterator` dentro de `MutantStack` para que los usuarios puedan hacer:
+```cpp
+MutantStack<int>::iterator it = mstack.begin();
+```
+
+El `typename` es necesario porque `container_type::iterator` es un tipo dependiente del template.
+
+---
+
+## Ejemplo del subject
+
+```cpp
+MutantStack<int> mstack;
+
+mstack.push(5);
+mstack.push(17);
+
+std::cout << mstack.top() << std::endl;  // 17
+
+mstack.pop();
+
+std::cout << mstack.size() << std::endl; // 1
+
+mstack.push(3);
+mstack.push(5);
+mstack.push(737);
+mstack.push(0);
+
+MutantStack<int>::iterator it  = mstack.begin();
+MutantStack<int>::iterator ite = mstack.end();
+
+++it;
+--it;
+while (it != ite)
+{
+    std::cout << *it << std::endl;
+    ++it;
+}
+
+std::stack<int> s(mstack); // se puede copiar a un stack normal
+```
+
+---
+
+## Por que funciona la copia a `std::stack`
+
+```cpp
+std::stack<int> s(mstack);
+```
+
+Como `MutantStack` hereda de `std::stack`, un `std::stack` puede construirse a partir de un `MutantStack`. El constructor de copia de `std::stack` copia el contenedor interno completo.
+
+---
+
+## Verificacion del subject
+
+El subject pide que si sustituyes `MutantStack` por `std::list` (adaptando `push` por `push_back`), la salida debe ser **identica**. Esto demuestra que los iteradores funcionan igual que en cualquier contenedor STL secuencial.
+
+---
+
+## Resumen del flujo
+
+```
+MutantStack hereda std::stack
+    → tiene push(), pop(), top(), size(), empty() gratis
+
+begin() / end()
+    → delegan en this->c.begin() / this->c.end()
+    → c es el contenedor interno protegido de std::stack
+
+MutantStack<int>::iterator
+    → es un alias del iterador del contenedor interno (deque<int>::iterator)
+```
+
+## Conceptos STL usados
+
+| Concepto | Para que se usa |
+|---------|----------------|
+| `std::stack` | Clase base — pila LIFO |
+| `container_type` | Tipo del contenedor interno de stack |
+| `stack::c` | Atributo protegido con los datos reales |
+| Herencia publica | Para que MutantStack sea un stack y añada iteradores |
+| `typedef` / `using` | Para exponer el tipo iterador al exterior |
