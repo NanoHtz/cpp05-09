@@ -4,6 +4,7 @@
 # include <vector>
 # include <algorithm>
 # include <stdexcept>
+#include <numeric>
 
 class Span
 {
@@ -13,14 +14,24 @@ class Span
 
     public:
         Span();
-        Span(unsigned int n);
+        ~Span();
         Span(const Span &src);
         Span &operator=(const Span &src);
-        ~Span();
+        Span(unsigned int n);
 
         void    addNumber(int number);
         int     shortestSpan() const;
         int     longestSpan() const;
+
+        template<typename InputIterator>
+        void addNumbers(InputIterator start, InputIterator end)
+        {
+            size_t limit = std::distance(start, end);
+            if (_numbers.size() + limit > _n)
+                throw std::exception();
+            else
+                _numbers.insert(_numbers.end(), start, end);
+        };
 };
 
 #endif

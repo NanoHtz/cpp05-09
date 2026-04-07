@@ -7,7 +7,8 @@ RM           = rm -f
 
 # ========================= DIRECTORIOS Y ARCHIVOS =========================== #
 
-SOURCES      =  main.cpp 
+SOURCES      =  main.cpp \
+				Span.cpp
 
 # ========================= OBJETOS =========================== #
 OBJSDIR     = ./obj/
