@@ -25,7 +25,9 @@
       "Bash(./Iter echo:*)",
       "Bash(./Array)",
       "Bash(./Template)",
-      "Bash(./Iter)"
+      "Bash(./Iter)",
+      "Bash(make)",
+      "Bash(./Find)"
     ]
   }
 }

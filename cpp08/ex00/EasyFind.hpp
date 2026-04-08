@@ -2,6 +2,7 @@
 # define EASYFIND_HPP
 
 # include <algorithm>
+# include <exception>
 
 template<typename T>
 typename T::const_iterator easyfind(const T &data, int look_for)

@@ -2,7 +2,7 @@
 #include <vector>
 #include <list>
 #include <deque>
-#include "Easyfind.hpp"
+#include "easyfind.hpp"
 
 int main()
 {
