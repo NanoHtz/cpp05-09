@@ -1,50 +1,24 @@
+#include "RPN.hpp"
 #include <iostream>
-#include <vector>
-#include <cstdlib>
-#include "Span.hpp"
+#include <stdexcept>
 
-int main()
+int main(int ac, char **av)
 {
-    std::cout << "=== Test del pdf ===" << std::endl;
-    Span sp = Span(5);
-    sp.addNumber(6);
-    sp.addNumber(3);
-    sp.addNumber(17);
-    sp.addNumber(9);
-    sp.addNumber(11);
-    std::cout << "shortestSpan: " << sp.shortestSpan() << std::endl;
-    std::cout << "longestSpan: " << sp.longestSpan() << std::endl;
+    if (ac != 2)
+    {
+        std::cerr << "Error" << std::endl;
+        return (1);
+    }
 
-    std::cout << "\n=== Test span lleno ===" << std::endl;
     try
     {
-        sp.addNumber(42);
+        RPN rpn;
+        std::cout << rpn.evaluate(av[1]) << std::endl;
     }
-    catch (std::exception &e)
+    catch (const std::exception &e)
     {
-        std::cout << "Excepcion: span lleno" << std::endl;
+        std::cerr << e.what() << std::endl;
+        return (1);
     }
-
-    std::cout << "\n=== Test menos de 2 elementos ===" << std::endl;
-    try
-    {
-        Span sp2 = Span(1);
-        sp2.addNumber(5);
-        sp2.shortestSpan();
-    }
-    catch (std::exception &e)
-    {
-        std::cout << "Excepcion: menos de 2 elementos" << std::endl;
-    }
-
-    std::cout << "\n=== Test 10.000 numeros ===" << std::endl;
-    Span sp3 = Span(10000);
-    std::vector<int> vec;
-    for (int i = 0; i < 10000; i++)
-        vec.push_back(rand());
-    sp3.addNumbers(vec.begin(), vec.end());
-    std::cout << "shortestSpan: " << sp3.shortestSpan() << std::endl;
-    std::cout << "longestSpan: " << sp3.longestSpan() << std::endl;
-
-    return 0;
+    return (0);
 }

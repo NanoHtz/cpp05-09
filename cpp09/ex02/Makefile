@@ -1,13 +1,14 @@
 # ========================= VARIABLES GLOBALES =============================== #
 
-NAME         = Find
+NAME         = PmergeMe
 CC           = c++
 CFLAGS       = -Wall -Wextra -Werror -std=c++98
 RM           = rm -f
 
 # ========================= DIRECTORIOS Y ARCHIVOS =========================== #
 
-SOURCES      =  main.cpp 
+SOURCES      =  main.cpp \
+				PmergeMe.cpp
 
 # ========================= OBJETOS =========================== #
 OBJSDIR     = ./obj/
@@ -28,15 +29,11 @@ RED             = \033[0;31m
 .PHONY: all clean fclean re
 
 all: $(NAME)
-	@echo "${GREEN}[✔] Todo listo: $(NAME) compilada.${RESET}"
+	@echo "${GREEN}[OK] Todo listo: $(NAME) compilada.${RESET}"
 
 $(NAME): $(OBJS)
 	@echo "\n${MAGENTA}Compilando el ejecutable $(NAME)...${RESET}\n"
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
-	@echo "${CYAN}=================================================================================================================${RESET}"
-	@echo "${GREEN}                                       [✔] $(NAME) successfully compiled.${RESET}                               "
-	@echo "${CYAN}=================================================================================================================${RESET}"
-	@echo "${MAGENTA}You should use: ./$(NAME) ${RESET}"
 
 # ========================= REGLAS PARA LOS OBJETOS ========================== #
 

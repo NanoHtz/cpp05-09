@@ -1,13 +1,14 @@
 # ========================= VARIABLES GLOBALES =============================== #
 
-NAME         = Find
+NAME         = RPN
 CC           = c++
 CFLAGS       = -Wall -Wextra -Werror -std=c++98
 RM           = rm -f
 
 # ========================= DIRECTORIOS Y ARCHIVOS =========================== #
 
-SOURCES      =  main.cpp 
+SOURCES      =  main.cpp \
+				RPN.cpp
 
 # ========================= OBJETOS =========================== #
 OBJSDIR     = ./obj/
