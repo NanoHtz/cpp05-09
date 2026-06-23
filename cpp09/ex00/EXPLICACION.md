@@ -140,10 +140,46 @@ Esto sigue exactamente el subject y además protege al programa frente a entrada
 Una vez validada la línea:
 - se usa `_map.lower_bound(date)`
 
-Esto puede dar tres situaciones:
-- existe la fecha exacta y se usa directamente
-- no existe, pero hay una fecha posterior: entonces se retrocede una posición para usar la fecha inferior más cercana
-- la fecha es anterior a toda la base de datos: entonces se considera error
+`lower_bound(date)` devuelve un iterador al **primer elemento cuya clave es >= date**.
+
+Esto produce exactamente tres situaciones posibles:
+
+**Caso 1: la fecha existe exactamente**
+El iterador apunta a esa fecha → se usa directamente.
+
+**Caso 2: la fecha no existe, pero hay una fecha posterior**
+```
+mapa:  2009-01-02 | 2011-05-10 | 2012-01-11
+input: 2011-06-01
+               ^-- lower_bound apunta aquí (2012-01-11, que es >= 2011-06-01)
+```
+El iterador no apunta a la fecha exacta. Se comprueba si es `begin()`:
+- Si es `begin()` → la fecha pedida es anterior a todos los datos → error.
+- Si no → se retrocede (`--it`) → se obtiene `2011-05-10`, la fecha inferior más cercana.
+
+**Caso 3: la fecha es posterior a todas las de la base de datos**
+```
+mapa:  2009-01-02 | ... | 2022-03-29
+input: 2030-01-01
+                                     ^-- lower_bound devuelve end()
+```
+`end()` no es un elemento válido. Se retrocede directamente a la última posición del mapa.
+
+```cpp
+std::map<std::string, float>::iterator it = _map.lower_bound(date);
+if (it == _map.end())           // Caso 3
+    --it;
+else if (it->first != date)     // Caso 2 (no coincide exacta)
+{
+    if (it == _map.begin())     // No hay fecha anterior → error
+    {
+        std::cerr << "Error: bad input => " << date << std::endl;
+        continue;
+    }
+    --it;                       // Retrocede a la fecha inferior
+}
+// Caso 1: it->first == date → se usa directamente
+```
 
 Esta es la decisión más importante del ejercicio, porque es la que justifica de verdad el uso de `std::map`.
 
@@ -152,6 +188,23 @@ Cuando ya se tiene la fecha válida y el valor:
 - se imprime `date => value = price * value`
 
 El cálculo es sencillo, pero está apoyado sobre una cadena previa de validaciones y búsqueda correcta.
+
+### Ejemplo completo de ejecución
+Con el `input.csv` de prueba:
+```
+date | value
+2011-01-03 | 3          → rate del 2011-01-03 = 0.3 → 3 * 0.3 = 0.9
+2011-01-03 | 2.5        → rate del 2011-01-03 = 0.3 → 2.5 * 0.3 = 0.75
+2011-01-09 | 1          → rate del 2011-01-09 = 0.32 → 1 * 0.32 = 0.32
+2012-01-11 | 1          → rate del 2012-01-11 = 7.1 → 1 * 7.1 = 7.1
+2012-01-11 | -1         → Error: not a positive number.
+2012-01-11 | 1001       → Error: too large a number.
+2001-42-42              → Error: bad input => 2001-42-42    (sin separador " | ")
+2008-01-02 | 14         → Error: bad input => 2008-01-02    (antes de la primera entrada del mapa)
+2022-12-31 | 5          → rate del 2022-03-29 = 47115.93 → 5 * 47115.93 = 235579.65
+```
+
+Nótese que `2008-01-02` es una fecha válida en formato, pero como la base de datos empieza en `2009-01-02`, no hay ninguna fecha inferior disponible y se informa de error.
 
 ---
 

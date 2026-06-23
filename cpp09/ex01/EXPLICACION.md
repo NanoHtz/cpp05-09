@@ -112,6 +112,50 @@ Eso permite:
 
 Esto es importante porque el subject espera una expresión correctamente separada en tokens.
 
+### Traza completa de una evaluación
+
+Expresión: `"3 4 + 2 *"`
+
+| Token | Acción | Pila tras la acción |
+|-------|--------|---------------------|
+| `3`   | es dígito → push(3) | [3] |
+| `4`   | es dígito → push(4) | [3, 4] |
+| `+`   | operador: right=4, left=3, push(3+4=7) | [7] |
+| `2`   | es dígito → push(2) | [7, 2] |
+| `*`   | operador: right=2, left=7, push(7*2=14) | [14] |
+
+Final: la pila tiene exactamente 1 elemento → resultado = **14**
+
+Ejemplo del PDF: `"8 9 * 9 - 9 - 9 - 4 - 1 +"`
+
+| Token | right | left | Operación | Pila |
+|-------|-------|------|-----------|------|
+| `8`   | –     | –    | push 8    | [8] |
+| `9`   | –     | –    | push 9    | [8, 9] |
+| `*`   | 9     | 8    | 8*9=72    | [72] |
+| `9`   | –     | –    | push 9    | [72, 9] |
+| `-`   | 9     | 72   | 72-9=63   | [63] |
+| `9`   | –     | –    | push 9    | [63, 9] |
+| `-`   | 9     | 63   | 63-9=54   | [54] |
+| `9`   | –     | –    | push 9    | [54, 9] |
+| `-`   | 9     | 54   | 54-9=45   | [45] |
+| `4`   | –     | –    | push 4    | [45, 4] |
+| `-`   | 4     | 45   | 45-4=41   | [41] |
+| `1`   | –     | –    | push 1    | [41, 1] |
+| `+`   | 1     | 41   | 41+1=42   | [42] |
+
+Final: **42**
+
+Nota importante sobre el orden al sacar operandos:
+```cpp
+int right = _stack.top(); _stack.pop();
+int left  = _stack.top(); _stack.pop();
+// Se opera: left OP right
+```
+El primero que se saca es `right` porque es el último que entró.
+Para `+` y `*` el orden da igual, pero para `-` y `/` es esencial:
+- `"5 3 -"` → right=3, left=5 → 5-3=2 ✓ (no 3-5=-2)
+
 ### Tratamiento de los números
 Si el token tiene longitud `1` y es un dígito:
 - se convierte a entero con `c - '0'`

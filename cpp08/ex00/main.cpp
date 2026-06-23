@@ -46,6 +46,16 @@ int main()
         std::cout << "Not found in list" << std::endl;
     }
 
+    try
+    {
+        std::list<int>::const_iterator it = easyfind(lst, 50);
+        std::cout << "Found in list: " << *it << std::endl;
+    }
+    catch (std::exception &e)
+    {
+        std::cout << "Not found in list" << std::endl;
+    }
+
     std::deque<int> dq;
     dq.push_back(10);
     dq.push_back(20);
@@ -60,5 +70,16 @@ int main()
     {
         std::cout << "Not found in deque" << std::endl;
     }
+
+    try
+    {
+        std::deque<int>::const_iterator it = easyfind(dq, 50);
+        std::cout << "Found in deque: " << *it << std::endl;
+    }
+    catch (std::exception &e)
+    {
+        std::cout << "Not found in deque" << std::endl;
+    }
+
     return 0;
 }

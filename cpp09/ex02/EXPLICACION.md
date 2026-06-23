@@ -68,6 +68,20 @@ La secuencia de Jacobsthal se usa para decidir el orden en el que se insertan lo
 
 No es un detalle decorativo: forma parte de la idea del Ford-Johnson para reducir comparaciones al ordenar.
 
+La secuencia se define como:
+- J(0) = 0
+- J(1) = 1
+- J(n) = J(n-1) + 2 * J(n-2)
+
+Valores: **0, 1, 1, 3, 5, 11, 21, 43, 85, 171, ...**
+
+El algoritmo genera un orden de inserción para los pendientes en grupos basados en esta secuencia. Por ejemplo, para 5 elementos pendientes, el orden de inserción es:
+`[0, 2, 1, 4, 3]`
+
+Esto significa: inserta primero el pendiente[0], luego pendiente[2], luego pendiente[1], luego pendiente[4], luego pendiente[3].
+
+Insertando en este orden, cada nuevo elemento tiene un rango de búsqueda acotado que minimiza comparaciones. Es la razón matemática por la que Ford-Johnson es eficiente.
+
 Este concepto es importante porque demuestra que un algoritmo puede necesitar una estrategia matemática concreta, no solo una estructura de control básica.
 
 ### Medición de tiempo
@@ -177,14 +191,36 @@ Se calcula un orden basado en Jacobsthal para decidir la secuencia de inserción
 
 La razón es reducir comparaciones, que es precisamente la idea del Ford-Johnson.
 
+### Estructura de nodo y group IDs (detalle de implementación)
+
+Cada elemento de la cadena se representa como:
+```
+pair<int, pair<size_t, bool>>
+     ↑         ↑        ↑
+   valor    group_id   es_principal
+```
+
+`group_id` indica a qué pareja original pertenece el elemento.
+`es_principal` indica si es el elemento mayor de la pareja (true) o el menor (false).
+
+Esto es necesario porque al insertar un pendiente `b_i` (el menor de la pareja i), hay que buscarlo solo en el rango `[inicio, posición del mayor de la pareja i]`. No tiene sentido buscarlo después de su propio par.
+
+`findUpperBound` recorre la cadena y localiza el índice del mayor de la pareja `i`, que actúa como límite superior de la búsqueda binaria.
+
 ### Fase 5: inserción binaria
-Cada menor pendiente se inserta antes del mayor de su misma pareja.
+Cada menor pendiente `b_i` se inserta respetando su límite:
 
-Para localizar esa posición:
-- se encuentra el límite superior válido
-- se hace una búsqueda binaria dentro de ese rango
+```
+1. upper = findUpperBound(chain, group_id_de_b_i)
+   → localiza la posición del mayor de su misma pareja en la cadena
 
-Esto respeta la lógica del algoritmo y evita comparaciones innecesarias.
+2. insertAt = lowerBound(chain, valor_de_b_i, upper)
+   → búsqueda binaria dentro de [0, upper) para encontrar dónde insertar
+
+3. chain.insert(chain.begin() + insertAt, b_i)
+```
+
+Esto garantiza que `b_i` nunca se compara con elementos más a la derecha que su propio par, reduciendo comparaciones.
 
 ### Fase 6: straggler
 Si había un elemento suelto por cantidad impar:
@@ -200,6 +236,87 @@ La función `sort` mide por separado:
 Se usa `std::clock()` y se convierte a microsegundos.
 
 Esto permite mostrar una comparación clara entre ambos contenedores.
+
+---
+
+## 2b. Ejemplo completo trazado paso a paso
+
+Entrada: `3 5 9 7 4`
+
+### Fase 1: formar parejas
+```
+Posición:  [0]  [1]  [2]  [3]  [4]
+Valores:    3    5    9    7    4
+
+Par 0: (3, 5) → small=3, large=5
+Par 1: (7, 9) → small=7, large=9   (se ordena: 7 < 9)
+Straggler: 4  (elemento suelto por cantidad impar)
+```
+
+### Fase 2: ordenar los mayores recursivamente
+```
+larges = [5, 9]
+sortVector([5, 9]):
+  Par: (5, 9) → small=5, large=9
+  Llama a sortVector([9]) → devuelve [9]
+  sortedPairs = [(5, 9)]
+  chain = [5, 9] (resultado)
+→ sortedLargeValues = [5, 9]
+```
+
+### Fase 3: reconstruir parejas en orden e inicializar la cadena
+```
+sortedLargeValues[0]=5 → viene del par (3,5) → sortedPairs[0]=(3,5)
+sortedLargeValues[1]=9 → viene del par (7,9) → sortedPairs[1]=(7,9)
+
+Iniciar chain con el menor de la primera pareja:
+chain = [(3, group=0, main=false)]
+
+Añadir los mayores:
+chain = [(3, g=0, main=false), (5, g=0, main=true), (9, g=1, main=true)]
+
+Añadir menores restantes a pending (desde el par 1 en adelante):
+pending = [(7, g=1, main=false)]
+```
+
+### Fase 4: calcular orden Jacobsthal para 1 pendiente
+```
+buildJacobsthalOrder(1) → [0]
+Se insertará: pending[0] = 7
+```
+
+### Fase 5: insertar pendientes con búsqueda binaria
+```
+Insertar pending[0] = 7, group=1:
+
+  upper = findUpperBound(chain, group=1)
+        = posición del nodo con main=true y group=1
+        = índice 2  (el valor 9)
+
+  insertAt = lowerBound(chain, valor=7, end=2)
+           = búsqueda en chain[0..1]: [(3,g0,false), (5,g0,true)]
+           = primera posición con valor >= 7
+           = índice 2 (9 > 7, pero estamos buscando en [0,2))
+           → el 7 va antes del 9, en índice 2
+
+chain = [(3,g0,false), (5,g0,true), (7,g1,false), (9,g1,true)]
+```
+
+### Fase 6: insertar el straggler (4)
+```
+insertAt = lowerBound(chain, valor=4, end=4)
+         = primera posición con valor >= 4
+         = índice 1 (5 >= 4)
+
+chain = [(3,g0,false), (4,_,false), (5,g0,true), (7,g1,false), (9,g1,true)]
+```
+
+### Resultado final
+```
+Extraer los valores: [3, 4, 5, 7, 9] ✓
+```
+
+La secuencia está ordenada y se ha llegado a ella siguiendo exactamente el modelo Ford-Johnson.
 
 ---
 
